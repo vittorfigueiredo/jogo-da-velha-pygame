@@ -3,6 +3,8 @@
 
 import pygame
 from pygame.locals import *
+from tkinter import *
+from tkinter import messagebox
 from sys import exit
 
 # Inicia a biblioteca Pygame
@@ -10,13 +12,16 @@ pygame.init()
 
 # Cria a tela do jogo com resolução de 600 x 600, fixa e com 32bits de cores
 display = pygame.display.set_mode((600, 600), 0, 32)
+# Adiciona uma imagem de fundo
+# bg = pygame.image.load('images/bg.jpg')
+# display.blit(bg, [0, 0])
 
 # Adiciona o titulo da janela do jogo
-pygame.display.set_caption('Tik Tak Toe')
+pygame.display.set_caption('Bertie The Brain')
 
 # Musica do jogo
 pygame.mixer_music.load('sounds/Tetris Theme A.ogg')
-pygame.mixer_music.set_volume(0.01)
+pygame.mixer_music.set_volume(0.00)
 pygame.mixer.music.play(-1, 0.0)
 
 # Variaveis fundamentais
@@ -67,7 +72,10 @@ def design_part(pos):
     # Testa quando for a vez do jogador 2
     if time == 'PLAYER2':
         # Desenha o circulo
-        pygame.draw.circle(display, (0, 0, 255), pos, 50)
+        # pygame.draw.circle(display, (0, 0, 255), pos, 50)
+        imgO = pygame.image.load('images/o.png').convert_alpha()
+        imgT = pygame.transform.scale(imgO, (130, 130))
+        display.blit(imgT, (x - 65, y - 65))
     else:
         # Carrega a imagem do 'x'
         img = pygame.image.load('images/x.png').convert_alpha()
@@ -122,7 +130,7 @@ def confirm (indice, pos):
 
 # Função para testar se alguém ganhou o jogo
 def game_win(l):
-    return ((board_positions[0] == 1 and board_positions[1] == 1 and board_positions[2] == 1) or
+    return ((board_positions[0] == l and board_positions[1] == l and board_positions[2] == l) or
         (board_positions[3] == l and board_positions[4] == l and board_positions[5] == l) or
         (board_positions[6] == l and board_positions[7] == l and board_positions[8] == l) or
         (board_positions[0] == l and board_positions[3] == l and board_positions[6] == l) or
@@ -137,11 +145,15 @@ def text_win(w):
     message = 'JOGADOR {} VENCEU!'.format(w)
 
     if w == 'TIE':
-        mens_win = arial.render('DEU VELHA', True, (0, 255, 0), 0)
-        display.blit(mens_win, (115, 265))
+        Tk().wm_withdraw() #to hide the main window
+        messagebox.showinfo('DEU VELHA','O JOGO DEU VELHA!')
+        # mens_win = arial.render('DEU VELHA', True, (255, 255, 255), 0)
+        # display.blit(mens_win, (115, 265))
     else:
-        mens_win = arial.render(message, True, (0, 255, 0), 0)
-        display.blit(mens_win, (0, 265))
+        Tk().wm_withdraw() #to hide the main window
+        messagebox.showinfo(message, message)
+        # mens_win = arial.render(message, True, (255, 255, 255), 0)
+        # display.blit(mens_win, (0, 265))
 
 # Função para resetar o jogo
 def reset():
@@ -193,7 +205,7 @@ while True:
 
         elif tie >= 9:
             print('EMPATE')
-            text_win('EMPATE')
+            text_win('TIE')
             status = 'RESET'
     
     else:
